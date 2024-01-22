@@ -103,4 +103,5 @@ def loop() -> None:
     quit()
 
 
-loop()
+if __name__ == "__main__":
+    loop()
