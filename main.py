@@ -114,7 +114,7 @@ def loop() -> None:
         if len(snakebody_list) > length_snakebody: #Не позволяет хаотично расти и растягиваться змейке
             del snakebody_list[0]
 
-        #game_ending = True if len([x for x in snakebody_list[:-1] if x == snakehead]) == 1 else False
+        #game_over = True if len([i for i in snakebody_list[:-1] if i == snakehead]) == 1 else False
 
         for i in snakebody_list[:-1]: #Смерть в случае столкновения с самим собой
             if i == snakehead:
