@@ -69,16 +69,18 @@ def loop() -> None:
             if event.type == pygame.QUIT:
                 game_ending = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_DOWN:
+                #match event.key:
+                #    case pygame.K_DOWN
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     x1 = 0
                     y1 = block
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     x1 = 0
                     y1 = -block
-                elif event.key == pygame.K_LEFT:
+                elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     x1 = -block
                     y1 = 0
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     x1 = block
                     y1 = 0
                 if event.key == pygame.K_ESCAPE:
@@ -106,9 +108,7 @@ def loop() -> None:
 
         food(food_xy, block) #Генерирует еду
 
-        snakehead = []
-        snakehead.append(x)
-        snakehead.append(y)
+        snakehead = [x,y]
         snakebody_list.append(snakehead)
 
         if len(snakebody_list) > length_snakebody: #Не позволяет хаотично расти и растягиваться змейке
