@@ -1,92 +1,88 @@
+from generators import *
+from game_metods import *
+
 import pygame
-import random
 
 pygame.init()
-dis = pygame.display.set_mode((600, 600))
+width, height = 600, 600
+dis = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Game Snake", "Snake")
 
-def snakebody(block: int, snakebody_list: list) -> None:
-    '''
-    Отображение всего тела змейки
-    :param block:
-    :param snakebody_list:
-    :return:
-    '''
-    for i in snakebody_list:
-        pygame.draw.rect(dis,(20,20,20), [i[0],i[1],block,block])
+def start() -> None:
+    game_start = False
+    while not game_start:
+        dis.fill((90,90,60))
+        message(dis, "Для начала игры нажмите Space", 5, 2, 26)
+        message(dis, "Для выхода нажмите Esc", 8, 4, 20)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                match event.key:
+                    case pygame.K_SPACE:
+                        game_start = True
+                        loop(50, 5)
+                    case pygame.K_ESCAPE:
+                        pygame.quit()
+                        quit()
 
-def message(msg, row, column = 1, fontsize = 20) -> None:
-    mesg = pygame.font.SysFont("Arial", fontsize).render(msg, True, (255,0,0))
-    dis.blit(mesg, [100 * column, 100 * row])
-
-def food(coordinate: list, block: int) -> None:
-    '''
-    Генератор еды
-    :param coordinate:
-    :param block:
-    :return:
-    '''
-    pygame.draw.rect(dis, (255, 0, 0), [coordinate[0], coordinate[1], block, block])
-
-def loop() -> None:
+def loop(block: int, speed_value: int) -> None:
     '''
     Главная логика игры
     :return:
     '''
 
-    x, y = 300, 300
+    x, y = width // 2, height // 2
     x1, y1 = 0, 0
-    block = 10
 
     game_ending = False
     game_over = False
     isFood = True
 
     speed = pygame.time.Clock()
-    speed_value = block
 
     snakebody_list = []
     length_snakebody = 1
-    food_xy = [random.randint(10, x - 10) // 10 * 10, random.randint(10, y - 10) // 10 * 10]
+    food_xy = random_coord(width, height, block)
 
     while not game_ending:
-        while game_over == True:
+        while game_over:
             dis.fill((0, 0, 90))
-            message("Игра окончена!", 2, 2, 26)
-            message("Чтобы начать заново, нажмите R, для выхода нажмите Esc.", 3)
+            message(dis, "Игра окончена!", 4, 4, 26)
+            message(dis, "Чтобы начать заново, нажмите R, для выхода нажмите Esc.", 6)
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game_over = False
                     game_ending = True
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        game_over = False
-                        game_ending = True
-                    if event.key == pygame.K_r:
-                        loop()
+                    match event.key:
+                        case pygame.K_ESCAPE:
+                            game_over = False
+                            game_ending = True
+                            start()
+                        case pygame.K_r:
+                            loop()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_ending = True
             if event.type == pygame.KEYDOWN:
-                #match event.key:
-                #    case pygame.K_DOWN
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    x1 = 0
-                    y1 = block
-                elif event.key == pygame.K_UP or event.key == pygame.K_w:
-                    x1 = 0
-                    y1 = -block
-                elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    x1 = -block
-                    y1 = 0
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    x1 = block
-                    y1 = 0
-                if event.key == pygame.K_ESCAPE:
-                    game_ending = True
-                if event.key == pygame.K_r:
-                    loop()
+                match event.key:
+                    case pygame.K_DOWN | pygame.K_s:
+                        x1, y1 = 0, block
+                    case pygame.K_UP | pygame.K_w:
+                        x1, y1 = 0, -block
+                    case pygame.K_LEFT | pygame.K_a:
+                        x1, y1 = -block, 0
+                    case pygame.K_RIGHT | pygame.K_d:
+                        x1, y1 = block, 0
+                    case pygame.K_ESCAPE:
+                        game_ending = True
+                        start()
+                    case pygame.K_r:
+                        loop()
 
         # if x >= 600 or x <= 0 or y >= 600 or y <= 0: #Условие для ограниченного поля
         #   game_over = True
@@ -106,7 +102,7 @@ def loop() -> None:
 
         dis.fill((255, 255, 255)) #Обновление доски
 
-        food(food_xy, block) #Генерирует еду
+        food(dis, food_xy, block) #Генерирует еду
 
         snakehead = [x,y]
         snakebody_list.append(snakehead)
@@ -121,7 +117,7 @@ def loop() -> None:
                 game_over = True
 
         if not isFood:
-            food_xy = [random.randint(0, 600) // 10 * 10, random.randint(0, 600) // 10 * 10]
+            food_xy = random_coord(width, height, block)
             isFood = True
 
         if x == food_xy[0] and y == food_xy[1]:
@@ -129,14 +125,14 @@ def loop() -> None:
             speed_value += 1
             isFood = False
 
-        snakebody(block, snakebody_list)
+        snakebody(dis, block, snakebody_list)
         pygame.display.update()
 
         speed.tick(speed_value)
 
     pygame.quit()
     quit()
-
+    
 
 if __name__ == "__main__":
-    loop()
+    start()
