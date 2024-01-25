@@ -1,5 +1,5 @@
-from generators import *
-from game_metods import *
+from metods.generators import *
+from metods.game_metods import *
 
 import pygame
 
