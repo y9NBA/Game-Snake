@@ -51,7 +51,7 @@ def loop(block: int, speed_value: int) -> None:
 
     snakebody_list = []
     length_snakebody = 1
-    food_xy = random_coord(width, height, block)
+    food_xy = random_coord(width, height, block, margin=50)
 
     while not game_ending:
         while game_over:
@@ -70,7 +70,7 @@ def loop(block: int, speed_value: int) -> None:
                             game_ending = True
                             start()
                         case pygame.K_r:
-                            loop()
+                            loop(50, 3)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_ending = True
@@ -88,7 +88,7 @@ def loop(block: int, speed_value: int) -> None:
                         game_ending = True
                         start()
                     case pygame.K_r:
-                        loop()
+                        loop(50, 3)
 
         # if x >= 600 or x <= 0 or y >= 600 or y <= 0: #Условие для ограниченного поля
         #   game_over = True
@@ -123,7 +123,7 @@ def loop(block: int, speed_value: int) -> None:
                 game_over = True
 
         if not isFood:
-            food_xy = random_coord(width, height, block)
+            food_xy = random_coord(width, height, block, margin=50)
             isFood = True
 
         if x == food_xy[0] and y == food_xy[1]:
