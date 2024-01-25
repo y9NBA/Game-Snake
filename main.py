@@ -8,11 +8,12 @@ width, height = 600, 600
 dis = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Game Snake", "Snake")
 
+
 def start() -> None:
-    '''
+    """
     Что то типо главного меню перед началом самой игры
     :return:
-    '''
+    """
     
     game_start = False
     while not game_start:
@@ -33,11 +34,14 @@ def start() -> None:
                         pygame.quit()
                         quit()
 
+
 def loop(block: int, speed_value: int) -> None:
-    '''
+    """
     Главная логика игры
+    :param block:
+    :param speed_value:
     :return:
-    '''
+    """
 
     x, y = width // 2, height // 2
     x1, y1 = 0, 0
@@ -77,13 +81,17 @@ def loop(block: int, speed_value: int) -> None:
             if event.type == pygame.KEYDOWN:
                 match event.key:
                     case pygame.K_DOWN | pygame.K_s:
-                        x1, y1 = 0, block
+                        if y1 != -block:
+                            x1, y1 = 0, block
                     case pygame.K_UP | pygame.K_w:
-                        x1, y1 = 0, -block
+                        if y1 != block:
+                            x1, y1 = 0, -block
                     case pygame.K_LEFT | pygame.K_a:
-                        x1, y1 = -block, 0
+                        if x1 != block:
+                            x1, y1 = -block, 0
                     case pygame.K_RIGHT | pygame.K_d:
-                        x1, y1 = block, 0
+                        if x1 != -block:
+                            x1, y1 = block, 0
                     case pygame.K_ESCAPE:
                         game_ending = True
                         start()
