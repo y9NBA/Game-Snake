@@ -9,10 +9,15 @@ dis = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Game Snake", "Snake")
 
 def start() -> None:
+    '''
+    Что то типо главного меню перед началом самой игры
+    :return:
+    '''
+    
     game_start = False
     while not game_start:
         dis.fill((90,90,60))
-        message(dis, "Для начала игры нажмите Space", 5, 2, 26)
+        message(dis, "Для начала игры нажмите Space", 5, 3, 26)
         message(dis, "Для выхода нажмите Esc", 8, 4, 20)
         pygame.display.update()
         for event in pygame.event.get():
@@ -23,7 +28,7 @@ def start() -> None:
                 match event.key:
                     case pygame.K_SPACE:
                         game_start = True
-                        loop(50, 5)
+                        loop(50, 3)
                     case pygame.K_ESCAPE:
                         pygame.quit()
                         quit()
@@ -42,6 +47,7 @@ def loop(block: int, speed_value: int) -> None:
     isFood = True
 
     speed = pygame.time.Clock()
+    score = 0
 
     snakebody_list = []
     length_snakebody = 1
@@ -100,7 +106,7 @@ def loop(block: int, speed_value: int) -> None:
         x += x1 #Смещение по оси x
         y += y1 #Смещение по оси y
 
-        dis.fill((255, 255, 255)) #Обновление доски
+        dis.fill((255, 255, 255)) #Переворот доски с новыми изменениями, выход на новый кадр
 
         food(dis, food_xy, block) #Генерирует еду
 
@@ -122,11 +128,13 @@ def loop(block: int, speed_value: int) -> None:
 
         if x == food_xy[0] and y == food_xy[1]:
             length_snakebody += 1
-            speed_value += 1
+            score += 1
             isFood = False
+            if score % 5 == 0:
+                speed_value += 1
 
         snakebody(dis, block, snakebody_list)
-        pygame.display.update()
+        pygame.display.update() #Обновление доски
 
         speed.tick(speed_value)
 
@@ -136,3 +144,4 @@ def loop(block: int, speed_value: int) -> None:
 
 if __name__ == "__main__":
     start()
+    

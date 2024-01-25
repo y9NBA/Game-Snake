@@ -8,6 +8,7 @@ def food(display: pygame.Surface, coordinate: list, block: int) -> None:
     :param block:
     :return:
     '''
+
     pygame.draw.rect(display, (255, 0, 0), [coordinate[0], coordinate[1], block, block])
 
 def random_coord(width: int, height: int, block: int, margin: int = 10) -> list:
@@ -19,4 +20,5 @@ def random_coord(width: int, height: int, block: int, margin: int = 10) -> list:
     :param margin:
     :return list:
     '''
+
     return [random.randint(margin, width - margin) // block * block, random.randint(margin, height - margin) // block * block]
