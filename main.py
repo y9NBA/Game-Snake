@@ -2,6 +2,7 @@ from metods.generators import *
 from metods.game_metods import *
 
 import pygame
+import time
 
 pygame.init()
 width, height = 600, 600
@@ -9,7 +10,7 @@ dis = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Game Snake", "Snake")
 
 
-def start() -> None:
+def start_game() -> None:
     """
     Что то типо главного меню перед началом самой игры
     :return:
@@ -17,7 +18,7 @@ def start() -> None:
     
     game_start = False
     while not game_start:
-        dis.fill((90,90,60))
+        dis.fill((90, 90, 60))
         message(dis, "Для начала игры нажмите Space", 5, 3, 26)
         message(dis, "Для выхода нажмите Esc", 8, 4, 20)
         pygame.display.update()
@@ -43,6 +44,9 @@ def loop(block: int, speed_value: int) -> None:
     :return:
     """
 
+    start = time.time()
+    end = time.time()
+
     x, y = width // 2, height // 2
     x1, y1 = 0, 0
 
@@ -60,8 +64,10 @@ def loop(block: int, speed_value: int) -> None:
     while not game_ending:
         while game_over:
             dis.fill((0, 0, 90))
-            message(dis, "Игра окончена!", 4, 4, 26)
-            message(dis, "Чтобы начать заново, нажмите R, для выхода нажмите Esc.", 6)
+            message(dis, "Игра окончена!", 4, 4, 26, color=(255, 0, 0))
+            message(dis, f"Вы набрали очков - {score}", 5, 2, color=(70, 200, 60))
+            message(dis, f"Потратили времени: {int(end - start)} сек", 5, 6, color=(70, 200, 60))
+            message(dis, "Чтобы начать заново, нажмите R, для выхода нажмите Esc.", 8)
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -72,7 +78,7 @@ def loop(block: int, speed_value: int) -> None:
                         case pygame.K_ESCAPE:
                             game_over = False
                             game_ending = True
-                            start()
+                            start_game()
                         case pygame.K_r:
                             loop(50, 3)
         for event in pygame.event.get():
@@ -94,7 +100,7 @@ def loop(block: int, speed_value: int) -> None:
                             x1, y1 = block, 0
                     case pygame.K_ESCAPE:
                         game_ending = True
-                        start()
+                        start_game()
                     case pygame.K_r:
                         loop(50, 3)
 
@@ -103,12 +109,12 @@ def loop(block: int, speed_value: int) -> None:
 
         #Условие для безграничного поля
         if x <= 0:
-            x = 600
-        elif x >= 600:
+            x = width
+        elif x >= width:
             x = 0
         if y <= 0:
-            y = 600
-        elif y >= 600:
+            y = height
+        elif y >= height:
             y = 0
 
         x += x1 #Смещение по оси x
@@ -118,7 +124,7 @@ def loop(block: int, speed_value: int) -> None:
 
         food(dis, food_xy, block) #Генерирует еду
 
-        snakehead = [x,y]
+        snakehead = [x, y]
         snakebody_list.append(snakehead)
 
         if len(snakebody_list) > length_snakebody: #Не позволяет хаотично расти и растягиваться змейке
@@ -141,6 +147,10 @@ def loop(block: int, speed_value: int) -> None:
             if score % 5 == 0:
                 speed_value += 1
 
+        end = time.time()
+
+        message(dis, f"Очки: {score}", 0, 1, color=(70, 200, 60))
+        message(dis, f"Время: {int(end - start)} сек", 0, 9, color=(70, 200, 60))
         snakebody(dis, block, snakebody_list)
         pygame.display.update() #Обновление доски
 
@@ -151,5 +161,5 @@ def loop(block: int, speed_value: int) -> None:
     
 
 if __name__ == "__main__":
-    start()
+    start_game()
     

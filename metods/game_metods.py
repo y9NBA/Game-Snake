@@ -14,7 +14,7 @@ def snakebody(display: pygame.Surface, block: int, snakebody_list: list) -> None
         pygame.draw.rect(display, (20, 20, 20), [i[0], i[1], block, block])
 
 
-def message(display: pygame.Surface, msg, row, column=1, fontsize=20, color=(255, 255, 255)) -> None:
+def message(display: pygame.Surface, msg: str, row: int=0, column: int=1, fontsize=20, color=(255, 255, 255)) -> None:
     """
     Вывод сообщения на экран
     :param display:
